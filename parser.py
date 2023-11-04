@@ -1,19 +1,38 @@
+from anthropic import Anthropic
+from dotenv import load_dotenv
 from typarse import BaseParser
 from haystack.nodes import TextConverter, PDFToTextConverter, DocxToTextConverter, PreProcessor
 import os
 
+from prompts import CLAUDE_FIX
+from tutor import get_tag_value
+
+from tqdm import tqdm
+
+load_dotenv()
+
 class Parser(BaseParser):
     path: str
     save_dir: str = './extracted/combinatorics'
+    fix: bool
 
     _abbrev = {
         'path': 'p',
-        'save_dir': 's'
+        'save_dir': 's',
+        'fix': 'f',
     }
 
+anthropic = Anthropic(api_key=os.getenv("ANTHROPIC_KEY"))
 
-def claude_fix():
-    pass
+def claude_fix(text: str) -> str:
+    completion = anthropic.completions.create(
+        model="claude-2",
+        max_tokens_to_sample=1000,
+        prompt=CLAUDE_FIX % text,
+        temperature=0
+    )
+
+    return completion.completion
 
 def doc_parser():
     problems = []
@@ -64,8 +83,16 @@ if __name__ == "__main__":
 
     os.makedirs(args.save_dir, exist_ok=True)
 
-    for i, (problem, solution) in enumerate(zip(problems, solutions)):
+    num_problems = len(problems)
+
+    for i, (problem, solution) in enumerate(tqdm(zip(problems, solutions), total=num_problems)):
         with open(os.path.join(args.save_dir, f'problem_{i}.txt'), 'w') as f:
-            f.write(problem.strip())
+            if args.fix:
+                problem = claude_fix(problem)
+                problem = get_tag_value(problem, "result")
+            f.write(problem)
         with open(os.path.join(args.save_dir, f'solution_{i}.txt'), 'w') as f:
+            if args.fix:
+                solution = claude_fix(solution)
+                solution = get_tag_value(solution, "result")
             f.write(solution.strip())
