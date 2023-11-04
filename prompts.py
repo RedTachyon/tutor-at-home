@@ -69,7 +69,7 @@ Assistant:
 
 HINT_OR_SOL_OR_REVISE_PROMPT = """
 Human: Take the role of a teaching assistant. The student was just asked if he wants to solve the problem again, get a hint, or receive the full solution, the question is in the <question> tags, and the response is provided in <answer> tags.
-Return the output in <choice> tags, either "revise" (which stands for attepmting the problem again), "hint" or "solution" (without the quotations). Do not say anything before or after the choice.
+Return the output in <choice> tags, either "revise" (which stands for attepmting the problem again), "hint", "solution" or "unclear" (without the quotations). Choose "unclear" if you are not sure. Do not say anything before or after the choice.
 
 <question>
 %s
@@ -116,7 +116,7 @@ Assistant:
 
 SOLUTION_CLEAR_PROMPT = """
 Human: Take the role of a teaching assistant. The student was just asked if he understands the solution and wants to try solving the problem again, or if he wants some more explanations about the solution. The question is in the <question> tags, and the student's response is provided in <answer> tags.
-Return the output in <choice> tags, either "explain", "solve" (without the quotations). You should choose "solve" only if the student indicated readiness to solve the problem. Otherwise, choose "explain". Do not say anything before or after the choice.
+Return the output in <choice> tags, either "explain", "solve", "unclear" (without the quotations). You should choose "solve" only if the student indicated readiness to solve the problem. Choose "unclear" if students asks a question irrelevant to the problem or the solution. Choose "explain" if the student ask to explain the solution or they ask to learn more. Otherwise choose "unclear". Do not say anything before or after the choice.
 <question>
 %s
 </question>
@@ -152,6 +152,20 @@ Return the output in <choice> tags, either "explain", "solve" (without the quota
 
 Assistant:
 """.strip()
+
+UNCLEAR_CHOICE_PROMPT = """
+Human: Take the role of a teaching assistant. The student was just asked if they want to try solving the problem again, or if they want some more hints about the solution. The student's answer was irrelevant. Kindly ask the student to return to the topic and explain why their answer wasn't relevant to the problem. Keep the response short. The question is in the <question> tags (tags not included), and the student's response is provided in <answer> tags. Provide your response in <response> tags.
+
+<question>
+%s
+</question>
+
+<answer>
+%s
+</answer>
+
+Assistant:
+"""
 
 ###
 

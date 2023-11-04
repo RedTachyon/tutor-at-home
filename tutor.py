@@ -88,6 +88,10 @@ class Tutor:
                 res = solution + "\n" + question
                 self.memory["question"] = res
                 self.state = State.SOLUTION_CLEAR
+            elif hrs == "unclear":
+                reply = self.ask_in_context(UNCLEAR_CHOICE_PROMPT, self.question, query)
+                response = get_tag_value(reply, "response")
+                res = response
             else:
                 raise ValueError("Claude's got problems")
 
@@ -106,6 +110,10 @@ class Tutor:
                 encourage = get_tag_value(reply, "encourage")
                 res = encourage
                 self.state = State.NEW_ATTEMPT
+            elif choice == "unclear":
+                reply = self.ask_in_context(UNCLEAR_CHOICE_PROMPT, self.question, query)
+                response = get_tag_value(reply, "response")
+                res = response
             else:
                 raise ValueError("Claude's got problems")
         elif self.state == State.NEW_ATTEMPT:
