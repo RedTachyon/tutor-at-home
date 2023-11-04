@@ -1,2 +1,4 @@
 anthropic==0.5.0
 python-dotenv==1.0.0
+farm-haystack[preprocessing]==1.21.2
+typarse==3.4.0

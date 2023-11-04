@@ -229,3 +229,26 @@ So the maximum speed of the block is 2 m/s.""".strip()
 SPRING_BAD = """
 So I was thinking that due to energy conservation, the speed of the block will be the same across the entire trajectory. Since it starts at rest, the maximum velocity will be 0 m/s.
 """.strip()
+
+
+
+
+PROBLEMS = {
+    "combinatorics": COMBINATORICS_PROBLEM,
+    "spring": SPRING_PROBLEM
+}
+
+MODELS = {
+    "combinatorics": COMBINATORICS_MODEL,
+    "spring": SPRING_MODEL
+}
+
+
+
+CLAUDE_FIX = """
+Fix the formatting of the problem given in <problem> tags. It contains mathematical notation and combinatorical formulas. It was parsed from a PDF so it likely contains weird characters and newlines in weird spots. If you need to format weird elements like the Newton's Symbol, you can use alternative notation such as C_n^k. Format it in a way that is a readable text format. Return the answer in <result> tags. Only return the answer, do not attempt the solution.
+
+<problem>
+%s
+</problem>
+"""
