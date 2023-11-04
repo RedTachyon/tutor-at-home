@@ -165,7 +165,7 @@ Human: Take the role of a teaching assistant. The student was just asked if they
 </answer>
 
 Assistant:
-"""
+""".strip()
 
 ###
 
