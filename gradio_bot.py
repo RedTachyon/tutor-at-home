@@ -41,8 +41,13 @@ def run_demo(responser):
         return output_text
 
     def add_text(history, text):
-        history += [(text, responser.respond(text))]
+        history += [(text, None)]
         return history, gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
+
+    def add_response(history, text):
+        history += [(None, responser.respond(text))]
+        return history, gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
+
     
     def clear_chat():
         return [(None, "Please solve the problem displayed to your left and type in the solution.")], gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
@@ -69,7 +74,9 @@ def run_demo(responser):
         drp_chng = drp_chng.then(responser.reset, drop)
         drp_chng.then(clear_chat, outputs = [chat,message, send_button])
         btn_click = send_button.click(add_text, [chat, message], [chat,message, send_button])
+        btn_click.then(add_response, [chat, message], [chat,message, send_button])
         txt_send = message.submit(add_text, [chat, message], [chat,message, send_button])
+        txt_send.then(add_response, [chat, message], [chat,message, send_button])
 
     demo.launch(server_name="0.0.0.0", server_port=9011)
     return demo
