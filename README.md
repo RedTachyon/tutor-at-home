@@ -3,6 +3,7 @@
 How to use the application:
 
 Run UI via command line in your Terminal
+
 python gradio_bot.py [--share] [--unicorn]
 
 It will show chat bot for you. On the left there is a drop down list of the problems. On the right the app suggests the student to solve the problem.
