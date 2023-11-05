@@ -68,7 +68,7 @@ Assistant:
 
 
 HINT_OR_SOL_OR_REVISE_PROMPT = """
-Human: Take the role of a teaching assistant. The student was just asked if he wants to solve the problem again, get a hint, or receive the full solution, the question is in the <question> tags, and the response is provided in <answer> tags.
+Human: Take the role of a teaching assistant. The student was just asked if they want to solve the problem again, get a hint, or receive the full solution, the question is in the <question> tags, and the response is provided in <answer> tags.
 Return the output in <choice> tags, either "revise" (which stands for attepmting the problem again), "hint", "solution" or "unclear" (without the quotations). Choose "unclear" if you are not sure. Choose "attempted" if the student's message is actually an attempt at solving the problem, even though we did not ask for that. Do not say anything before or after the choice.
 If the student asks for any sort of clarifications, treat that as asking for a hint.
 
@@ -83,9 +83,12 @@ If the student asks for any sort of clarifications, treat that as asking for a h
 Assistant: """.strip()
 
 HINT_PROMPT = """
-Human: The student asked for a hint. Based on their progress and the model solution, propose a hint, an explanation, or another form of clarification depending on the student's request that would guide them towards the right answer. Put it in <hint> tags.
-At the end of your message, ask the student if they want to try solving the problem again, get another hint, or see the full solution. Put this in <question> tags.
-Don't show the entire solution or the answer to the problem.
+Human: The student asked for a hint. Based on their progress and the model solution, propose a hint, an explanation, 
+or another form of clarification depending on the student's request that would guide them towards the right answer. Put it in <hint> tags.
+At the end of your message, ask the student if they want to try solving the problem again, get another hint, or see the full solution. 
+Put this in <question> tags.
+Don't show the entire solution and don't show correct answer to the problem as well.
+If student replies with correct answer, tell them that the answer is correct but ask for the explanation.
 The student's message asking for the solution is in <query> tags.
 
 <query>
@@ -131,8 +134,10 @@ Choose "unclear" if students asks a question irrelevant to the problem or the so
 Assistant: """.strip()
 
 EXPLANATION_PROMPT = """
-Human: The student asked you to explain the solution you provided earlier. Their exact question is in the <query> tags. Provide a helpful and understandable explanation tailored to their knowledge. Put it in <explanation> tags.
-After that, ask the student if there's anything else that's unclear, or if they're ready to solve the problem using their own words. Put the question in <question> tags.
+Human: The student asked you to explain the solution you provided earlier. Their exact question is in the <query> tags. 
+Provide a helpful and understandable explanation tailored to their knowledge. Put it in <explanation> tags.
+After that, ask the student if there's anything else that's unclear, or if they're ready to solve the problem using their own words. 
+Put the question in <question> tags.
 
 <query>
 %s
@@ -142,8 +147,10 @@ Assistant:
 """.strip()
 
 EXPLANATION_DONE_PROMPT = """
-Human: Take the role of a teaching assistant. The student was just asked if he understands the solution and wants to try solving the problem again, or if he wants some more explanations about the solution. The question is in the <question> tags, and the student's response is provided in <answer> tags.
-Return the output in <choice> tags, either "explain", "solve" (without the quotations). You should choose "solve" only if the student indicated readiness to solve the problem. Otherwise, choose "explain". Do not say anything before or after the choice.
+Human: Take the role of a teaching assistant. The student was just asked if he understands the solution and wants to try solving the problem again, or if he wants some more explanations about the solution. 
+The question is in the <question> tags, and the student's response is provided in <answer> tags.
+Return the output in <choice> tags, either "explain", "solve" (without the quotations). 
+You should choose "solve" only if the student indicated readiness to solve the problem. Otherwise, choose "explain". Do not say anything before or after the choice.
 
 <question>
 %s
