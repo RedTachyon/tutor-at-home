@@ -7,7 +7,7 @@ from prompts import *
 
 load_dotenv()
 
-anthropic = Anthropic(api_key=os.getenv("ANTHROPIC_KEY"))
+anthropic = Anthropic()
 
 tutor = Tutor(anthropic, "What number, when squared, gives 1?", "Either 1 or -1 produce 1 when squared.")
 
