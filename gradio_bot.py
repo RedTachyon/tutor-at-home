@@ -11,8 +11,14 @@ from tutor import Tutor
 load_dotenv()
 anthropic = Anthropic()
 
+
 with open ('extracted/combinatorics/problem_base.json', 'r') as fil:
     problems = json.load(fil)
+
+try:
+    my_theme = gr.Theme.from_hub("ParityError/Anime")
+except:
+    my_theme = None
 
 
 class Responser:
@@ -45,7 +51,7 @@ def run_demo(responser):
         time.sleep(3)
         return gr.Textbox(interactive=True), gr.Button(interactive=True)
 
-    with gr.Blocks() as demo:
+    with gr.Blocks(theme=my_theme) as demo:
         with gr.Row():
 
             # column for inputs
