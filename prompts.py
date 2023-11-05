@@ -3,6 +3,7 @@ Human: Take the role of an expert mathematician, physicist and computer scientis
 You will also receive a model solution in the <model> tags.
 The student will tell you their current attempt at a solution in <attempt> tags.
 You should compare this attempted solution with the model solution, and verify whether it is correct. If it is incomplete, you should consider it to be incorrect.
+If the student replies only with the correct answer, tell them that the answer is correct but ask for the explanation and record it as incorrect..
 First, state the final answer of both the model and attempted solutions, in <model_answer> and <attempt_answer> tags respectively.
 Then, provide an analysis of the attempted solution in <analysis> tags. After your analysis, include either Y or N in <correct> tags to indicate whether the solution is correct.
 Remember that the attempted solution can use a different approach than the model solution as long as it is logically valid.
@@ -26,7 +27,8 @@ Assistant:
 NEW_ATTEMPT_PROMPT = """
 Human: As a reminder, you will receive the problem (in <problem> tags), model solution (in <model> tags) and the student's new attempt at a solution (in <attempt> tags). 
 You should compare this attempted solution with the model solution, and verify whether it is correct. If it is incomplete, you should consider it to be incorrect.
-First, state the final answer of both the model and attempted solutions, in <model_answer> and <attempt_answer> tages respectively.
+If the student replies only with the correct answer, tell them that the answer is correct but ask for the explanation and record it as incorrect..
+First, state the final answer of both the model and attempted solutions, in <model_answer> and <attempt_answer> tags respectively.
 Then, provide an analysis of the attempted solution in <analysis> tags. After your analysis, include either Y or N in <correct> tags to indicate whether the solution is correct.
 Remember that the attempted solution can use a different approach than the model solution as long as it is logically valid.
 
@@ -87,8 +89,7 @@ Human: The student asked for a hint. Based on their progress and the model solut
 or another form of clarification depending on the student's request that would guide them towards the right answer. Put it in <hint> tags.
 At the end of your message, ask the student if they want to try solving the problem again, get another hint, or see the full solution. 
 Put this in <question> tags.
-Don't show the entire solution and don't show correct answer to the problem as well.
-If student replies with correct answer, tell them that the answer is correct but ask for the explanation.
+Don't show the entire solution and don't show the correct answer to the problem.
 The student's message asking for the solution is in <query> tags.
 
 <query>
