@@ -83,8 +83,9 @@ If the student asks for any sort of clarifications, treat that as asking for a h
 Assistant: """.strip()
 
 HINT_PROMPT = """
-Human: The student asked for a hint. Based on their progress and the model solution, propose a hint that would guide them towards the right answer. Put it in <hint> tags. 
+Human: The student asked for a hint. Based on their progress and the model solution, propose a hint, an explanation, or another form of clarification depending on the student's request that would guide them towards the right answer. Put it in <hint> tags.
 At the end of your message, ask the student if they want to try solving the problem again, get another hint, or see the full solution. Put this in <question> tags.
+Don't show the entire solution or the answer to the problem.
 The student's message asking for the solution is in <query> tags.
 
 <query>

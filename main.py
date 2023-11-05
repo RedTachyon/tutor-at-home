@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from tutor import Tutor
+from prompts import *
 
 load_dotenv()
 
