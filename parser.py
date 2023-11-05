@@ -88,11 +88,11 @@ if __name__ == "__main__":
 
 
     all_data = {
-        "Problem 0": {
+        "Problem 1": {
             "problem": COMBINATORICS_PROBLEM,
             "solution": COMBINATORICS_MODEL,
         },
-        "Problem 1": {
+        "Problem 2": {
             "problem": SPRING_PROBLEM,
             "solution": SPRING_MODEL,
         },
