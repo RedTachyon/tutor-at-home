@@ -1,10 +1,11 @@
 from anthropic import Anthropic
 from dotenv import load_dotenv
 from typarse import BaseParser
-from haystack.nodes import TextConverter, PDFToTextConverter, DocxToTextConverter, PreProcessor
+from haystack.nodes import PDFToTextConverter, PreProcessor
 import os
+import json
 
-from prompts import CLAUDE_FIX
+from prompts import CLAUDE_FIX, COMBINATORICS_PROBLEM, COMBINATORICS_MODEL, SPRING_PROBLEM, SPRING_MODEL
 from tutor import get_tag_value
 
 from tqdm import tqdm
@@ -85,7 +86,20 @@ if __name__ == "__main__":
 
     num_problems = len(problems)
 
+
+    all_data = {
+        "Problem 0": {
+            "problem": COMBINATORICS_PROBLEM,
+            "solution": COMBINATORICS_MODEL,
+        },
+        "Problem 1": {
+            "problem": SPRING_PROBLEM,
+            "solution": SPRING_MODEL,
+        },
+    }
+
     for i, (problem, solution) in enumerate(tqdm(zip(problems, solutions), total=num_problems)):
+        problem_name = f"Problem {len(all_data) + 1}"
         with open(os.path.join(args.save_dir, f'problem_{i}.txt'), 'w') as f:
             if args.fix:
                 problem = claude_fix(problem)
@@ -96,3 +110,10 @@ if __name__ == "__main__":
                 solution = claude_fix(solution)
                 solution = get_tag_value(solution, "result")
             f.write(solution.strip())
+        all_data[problem_name] = {
+            "problem": problem,
+            "solution": solution,
+        }
+    
+    with open(os.path.join(args.save_dir, "problem_base.json"), 'w') as f:
+        json.dump(all_data, f)
