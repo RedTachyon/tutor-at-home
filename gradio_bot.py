@@ -36,7 +36,7 @@ def run_demo(responser):
         return history, gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
     
     def clear_chat():
-        return [], gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
+        return [(None, "Please solve the problem displayed to your left and type in the solution.")], gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
 
     def sleep():
         time.sleep(3)
@@ -52,7 +52,7 @@ def run_demo(responser):
 
             # column for outputs
             with gr.Column():
-                chat = gr.Chatbot(None, label="Chat")
+                chat = gr.Chatbot([(None, "Please choose a problem from the dropdown list.")], label="Chat")
                 message = gr.Textbox("", interactive=False, label="Type your solution:")
                 send_button = gr.Button("Send", interactive=False)
 
