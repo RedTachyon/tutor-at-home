@@ -25,10 +25,11 @@ class Responser:
     def __init__(self):
         super().__init__()
         self.tutor = None
+        self.message = None
     def reset(self, problem_name):
         self.tutor = Tutor(anthropic, problems[problem_name]['problem'], problems[problem_name]['solution'])
-    def respond(self, message):
-        resp = self.tutor.run(message)
+    def respond(self):
+        resp = self.tutor.run(self.message)
         return resp
 
 def run_demo(responser):
@@ -42,10 +43,11 @@ def run_demo(responser):
 
     def add_text(history, text):
         history += [(text, None)]
+        responser.message = text
         return history, gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
 
-    def add_response(history, text):
-        history += [(None, responser.respond(text))]
+    def add_response(history):
+        history += [(None, responser.respond())]
         return history, gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
 
     
@@ -74,9 +76,9 @@ def run_demo(responser):
         drp_chng = drp_chng.then(responser.reset, drop)
         drp_chng.then(clear_chat, outputs = [chat,message, send_button])
         btn_click = send_button.click(add_text, [chat, message], [chat,message, send_button])
-        btn_click.then(add_response, [chat, message], [chat,message, send_button])
+        btn_click.then(add_response, [chat], [chat,message, send_button])
         txt_send = message.submit(add_text, [chat, message], [chat,message, send_button])
-        txt_send.then(add_response, [chat, message], [chat,message, send_button])
+        txt_send.then(add_response, [chat], [chat,message, send_button])
 
     demo.launch(server_name="0.0.0.0", server_port=9011)
     return demo
