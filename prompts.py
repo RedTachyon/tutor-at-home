@@ -69,7 +69,8 @@ Assistant:
 
 HINT_OR_SOL_OR_REVISE_PROMPT = """
 Human: Take the role of a teaching assistant. The student was just asked if he wants to solve the problem again, get a hint, or receive the full solution, the question is in the <question> tags, and the response is provided in <answer> tags.
-Return the output in <choice> tags, either "revise" (which stands for attepmting the problem again), "hint", "solution" or "unclear" (without the quotations). Choose "unclear" if you are not sure. Do not say anything before or after the choice.
+Return the output in <choice> tags, either "revise" (which stands for attepmting the problem again), "hint", "solution" or "unclear" (without the quotations). Choose "unclear" if you are not sure. Choose "attempted" if the student's message is actually an attempt at solving the problem, even though we did not ask for that. Do not say anything before or after the choice.
+If the student asks for any sort of clarifications, treat that as asking for a hint.
 
 <question>
 %s
@@ -116,7 +117,8 @@ Assistant:
 
 SOLUTION_CLEAR_PROMPT = """
 Human: Take the role of a teaching assistant. The student was just asked if he understands the solution and wants to try solving the problem again, or if he wants some more explanations about the solution. The question is in the <question> tags, and the student's response is provided in <answer> tags.
-Return the output in <choice> tags, either "explain", "solve", "unclear" (without the quotations). You should choose "solve" only if the student indicated readiness to solve the problem. Choose "unclear" if students asks a question irrelevant to the problem or the solution. Choose "explain" if the student ask to explain the solution or they ask to learn more. Otherwise choose "unclear". Do not say anything before or after the choice.
+Return the output in <choice> tags, either "explain", "solve", "unclear", or "attempted" (without the quotations). You should choose "solve" only if the student indicated readiness to solve the problem. 
+Choose "unclear" if students asks a question irrelevant to the problem or the solution. Choose "explain" if the student ask to explain the solution or they ask to learn more. Choose "attempted" if the student's message is actually an attempt at solving the problem, even though we did not ask for that. Otherwise choose "unclear". Do not say anything before or after the choice.
 <question>
 %s
 </question>

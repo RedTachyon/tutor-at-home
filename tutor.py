@@ -92,6 +92,21 @@ class Tutor:
                 reply = self.ask_in_context(UNCLEAR_CHOICE_PROMPT, self.question, query)
                 response = get_tag_value(reply, "response")
                 res = response
+            elif hrs == "attempted":
+                reply = self.ask_in_context(NEW_ATTEMPT_PROMPT, self.question, self.solution, query)
+                correct = get_tag_value(reply, "correct") == "Y"
+                if correct:
+                    reply = self.ask_in_context(CORRECT_PROMPT)
+                    congrats = get_tag_value(reply, "congrats")
+                    res = congrats
+                    self.state = State.END
+                else:
+                    reply = self.ask_in_context(WRONG_AGAIN_PROMPT)
+                    hint = get_tag_value(reply, "hint")
+                    question = get_tag_value(reply, "question")
+                    res = hint + "\n" + question
+                    self.memory["question"] = res
+                    self.state = State.HINT_OR_SOL_OR_REVISE
             else:
                 raise ValueError("Claude's got problems")
 
@@ -114,6 +129,21 @@ class Tutor:
                 reply = self.ask_in_context(UNCLEAR_CHOICE_PROMPT, self.question, query)
                 response = get_tag_value(reply, "response")
                 res = response
+            elif choice == "attempted":
+                reply = self.ask_in_context(NEW_ATTEMPT_PROMPT, self.question, self.solution, query)
+                correct = get_tag_value(reply, "correct") == "Y"
+                if correct:
+                    reply = self.ask_in_context(CORRECT_PROMPT)
+                    congrats = get_tag_value(reply, "congrats")
+                    res = congrats
+                    self.state = State.END
+                else:
+                    reply = self.ask_in_context(WRONG_AGAIN_PROMPT)
+                    hint = get_tag_value(reply, "hint")
+                    question = get_tag_value(reply, "question")
+                    res = hint + "\n" + question
+                    self.memory["question"] = res
+                    self.state = State.HINT_OR_SOL_OR_REVISE
             else:
                 raise ValueError("Claude's got problems")
         elif self.state == State.NEW_ATTEMPT:
