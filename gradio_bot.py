@@ -2,8 +2,7 @@ from anthropic import Anthropic
 import gradio as gr
 import time
 import random
-#problem_bank = {'Coin toss':   {'problem': "toss a coin to your witcher\noh valley of plenty"},
-#               'LeetCode': {'problem': "write a python code for some problem"}}
+import json
 
 from dotenv import load_dotenv
 from prompts import *
@@ -12,12 +11,16 @@ from tutor import Tutor
 load_dotenv()
 anthropic = Anthropic()
 
+with open ('extracted/combinatorics/problem_base.json', 'r') as fil:
+    problems = json.load(fil)
+
+
 class Responser:
     def __init__(self):
         super().__init__()
         self.tutor = None
     def reset(self, problem_name):
-        self.tutor = Tutor(anthropic, PROBLEMS[problem_name], MODELS[problem_name])
+        self.tutor = Tutor(anthropic, problems[problem_name]['problem'], problems[problem_name]['solution'])
     def respond(self, message):
         resp = self.tutor.run(message)
         return resp
@@ -25,7 +28,7 @@ class Responser:
 def run_demo(responser):
     def new_statement(dropdown_value):
         #return gr.Textbox(problem_bank[dropdown_value]['problem'])
-        return gr.Textbox(PROBLEMS[dropdown_value]), gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
+        return gr.Textbox(problems[dropdown_value]['problem']), gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
 
     def generate_output(*args):
         output_text = "Hello!"
@@ -47,7 +50,7 @@ def run_demo(responser):
 
             # column for inputs
             with gr.Column():
-                drop = gr.Dropdown(choices=list(PROBLEMS.keys()), label = "Choose a problem")
+                drop = gr.Dropdown(choices=list(problems.keys()), label = "Choose a problem")
                 statement = gr.Textbox("",interactive=False, show_label=False)
 
             # column for outputs
@@ -60,6 +63,7 @@ def run_demo(responser):
         drp_chng = drp_chng.then(responser.reset, drop)
         drp_chng.then(clear_chat, outputs = [chat,message, send_button])
         btn_click = send_button.click(add_text, [chat, message], [chat,message, send_button])
+        txt_send = message.submit(add_text, [chat, message], [chat,message, send_button])
 
     demo.launch(server_name="0.0.0.0", server_port=9011)
     return demo
