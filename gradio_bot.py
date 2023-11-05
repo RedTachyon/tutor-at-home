@@ -3,6 +3,7 @@ import gradio as gr
 import time
 import random
 import json
+import argparse
 
 from dotenv import load_dotenv
 from prompts import *
@@ -10,6 +11,8 @@ from tutor import Tutor
 
 load_dotenv()
 anthropic = Anthropic()
+
+
 
 
 with open ('extracted/combinatorics/problem_base.json', 'r') as fil:
@@ -32,7 +35,14 @@ class Responser:
         resp = self.tutor.run(self.message)
         return resp
 
-def run_demo(responser):
+def run_demo(responser, args):
+    allowed_paths = None
+    css_code = None
+    if args.unicorn:
+        allowed_paths = ['/data/nikita/tutor-at-home/unicorns']
+        css_code = ".gradio-container {background: url('file=unicorns/unicorn2.jpg')}"
+
+
     def new_statement(dropdown_value):
         #return gr.Textbox(problem_bank[dropdown_value]['problem'])
         return gr.Textbox(problems[dropdown_value]['problem']), gr.Textbox(value="", interactive=True), gr.Button(interactive=True)
@@ -58,7 +68,7 @@ def run_demo(responser):
         time.sleep(3)
         return gr.Textbox(interactive=True), gr.Button(interactive=True)
 
-    with gr.Blocks(theme=my_theme) as demo:
+    with gr.Blocks(theme=my_theme, css=css_code) as demo:
         with gr.Row():
 
             # column for inputs
@@ -80,9 +90,13 @@ def run_demo(responser):
         txt_send = message.submit(add_text, [chat, message], [chat,message, send_button])
         txt_send.then(add_response, [chat], [chat,message, send_button])
 
-    demo.launch(server_name="0.0.0.0", server_port=9011)
+    demo.launch(server_name="0.0.0.0", server_port=9011, share=args.share, allowed_paths=allowed_paths)
     return demo
 
 if __name__ == "__main__":
-    run_demo(Responser())
+    argparser = argparse.ArgumentParser(description="Arguments for gradio.")
+    argparser.add_argument("--unicorn", action="store_true", help="Load unicorn")
+    argparser.add_argument("--share", action="store_true", help="Share on public host")
+    args = argparser.parse_args()
+    run_demo(Responser(), args)
     #input("Press Enter to Shutdown...")
