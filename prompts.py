@@ -56,8 +56,9 @@ Assistant:
 
 WRONG_PROMPT = """
 Human: The student's solution was not correct. Use the analysis provided in the <analysis> tags earlier, and give the student a hint on what they did wrong, and what they should do instead. 
-Don't show the entire solution and don't show the correct answer to the problem.
 Keep it brief and put it in <hint> tags.
+It is critical that you don't show the entire solution and don't show the correct answer to the problem.
+If it is clear that the student did not attempt the solution on purpose, you do not have to explicitly call that out, but you should still give them a hint.
 At the end of your message, ask the student if they want to try solving the problem again, get another hint, or see the full solution. Put it in <question> tags.
 
 Assistant: 
@@ -67,6 +68,8 @@ WRONG_AGAIN_PROMPT = """
 Human: The student's solution was not correct. Use the analysis provided in the <analysis> tags earlier, and give the student a hint on what they did wrong, and what they should do instead. 
 Don't show the entire solution and don't show the correct answer to the problem.
 Keep it brief and put it in <hint> tags.
+It is critical that you don't show the entire solution and don't show the correct answer to the problem.
+If it is clear that the student did not attempt the solution on purpose, you do not have to explicitly call that out, but you should still give them a hint.
 At the end of your message, ask the student if they want to try solving the problem again or get another hint. Put it in <question> tags.
 
 Assistant: 
